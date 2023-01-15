@@ -34,7 +34,8 @@ function openai.complete(model, prompt, temp, tokens)
     local cmplPost = http.post("https://api.openai.com/v1/completions",
         '{"model": "' .. model .. '", "prompt": "' .. prompt .. '", "temperature": ' .. temp .. ', "max_tokens": ' .. tokens .. '}',
         { ["Content-Type"] = "application/json", ["Authorization"] = "Bearer " .. cmplAuth })
-    return cmplPost.readAll()
+    local cmplOut = cmplPost.readAll() or false
+    return cmplOut
 end
 
 
