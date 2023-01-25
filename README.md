@@ -13,12 +13,12 @@ _Currently still reliant on CC:Tweaked libraries, with full independance planned
 
 ### API Setup:
 
-1. Sign-in and access private API key at - https://beta.openai.com/account/api-keys
-2. Paste API key into template.env, replacing the sample key
+1. Sign-in and access your [private API key](https://beta.openai.com/account/api-keys)
+2. Paste the API key into `template.env`, replacing the sample key
 3. Rename template.env to just .env
 
 Now your key will not be publicised through git.
 
 ### Usage:
 
-Check out examples.lua for sample code that prompts Davinci and prints the reply text.
+Check out `examples.lua` for sample code that prompts Davinci and prints the reply text.
