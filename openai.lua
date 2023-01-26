@@ -26,7 +26,7 @@ Capable of very simple tasks, usually the fastest model in the GPT-3 series, and
 -- Request completion from OpenAI, given provided model, prompt, temperature, and maximum tokens
 function openai.complete(model, prompt, temp, tokens)
     -- Accessing private key in local .env file
-    local cmplEnv = fs.open("/openai-lua/.env", "r")
+    local cmplEnv = fs.open("/DavinCC/lib/openai-lua/.env", "r")
     local cmplAuth = cmplEnv.readAll()
     cmplEnv.close()
 
