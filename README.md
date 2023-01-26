@@ -4,6 +4,8 @@
 
 _Currently still reliant on CC:Tweaked libraries, with full independance planned to enable other Lua environments..._
 
+## Used By [DavinCC](https://github.com/LDexter/DavinCC) For Conversations
+
 ### Provides The Following OpenAI Models:
 
 - text-davinci-003
