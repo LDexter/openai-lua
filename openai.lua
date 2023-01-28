@@ -42,4 +42,24 @@ function openai.complete(model, prompt, temp, tokens)
 end
 
 
+-- Request image generation from OpenAI
+function openai.generate(prompt, number, size)
+    -- Accessing private key in local .env file
+    local genEnv = fs.open("/DavinCC/lib/openai-lua/.env", "r")
+    local genAuth = genEnv.readAll()
+    genEnv.close()
+
+    -- Posting to OpenAI using the private key
+    local genPost = http.post("https://api.openai.com/v1/images/generations",
+        '{"prompt": "' .. prompt .. '", "n": ' .. number .. ', "size": "' .. size .. '"}',
+        -- '{"prompt": "' .. prompt .. '"}',
+        { ["Content-Type"] = "application/json", ["Authorization"] = "Bearer " .. genAuth })
+    if genPost then
+        return genPost.readAll()
+    else
+        return false
+    end
+end
+
+
 return openai
