@@ -52,7 +52,6 @@ function openai.generate(prompt, number, size)
     -- Posting to OpenAI using the private key
     local genPost = http.post("https://api.openai.com/v1/images/generations",
         '{"prompt": "' .. prompt .. '", "n": ' .. number .. ', "size": "' .. size .. '"}',
-        -- '{"prompt": "' .. prompt .. '"}',
         { ["Content-Type"] = "application/json", ["Authorization"] = "Bearer " .. genAuth })
     if genPost then
         return genPost.readAll()
