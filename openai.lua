@@ -1,6 +1,5 @@
 local openai = {}
 
-
 --[[
 ?MODEL GUIDE (read more at https://beta.openai.com/docs/models)
 
@@ -23,7 +22,7 @@ Capable of very simple tasks, usually the fastest model in the GPT-3 series, and
 [Good at: Parsing text, simple classification, address correction, keywords]
 ]]
 
--- Request completion from OpenAI, given provided model, prompt, temperature, and maximum tokens
+-- Request completion from OpenAI, using provided model, prompt, temperature, and maximum tokens
 function openai.complete(model, prompt, temp, tokens)
     -- Accessing private key in local .env file
     local cmplEnv = fs.open("/DavinCC/lib/openai-lua/.env", "r")
@@ -34,6 +33,8 @@ function openai.complete(model, prompt, temp, tokens)
     local cmplPost = http.post("https://api.openai.com/v1/completions",
         '{"model": "' .. model .. '", "prompt": "' .. prompt .. '", "temperature": ' .. temp .. ', "max_tokens": ' .. tokens .. '}',
         { ["Content-Type"] = "application/json", ["Authorization"] = "Bearer " .. cmplAuth })
+
+    -- Error handling on empty response
     if cmplPost then
         return cmplPost.readAll()
     else
@@ -42,7 +43,7 @@ function openai.complete(model, prompt, temp, tokens)
 end
 
 
--- Request image generation from OpenAI
+-- Request image generation from OpenAI, using provided prompt, number, and size
 function openai.generate(prompt, number, size)
     -- Accessing private key in local .env file
     local genEnv = fs.open("/DavinCC/lib/openai-lua/.env", "r")
@@ -51,8 +52,10 @@ function openai.generate(prompt, number, size)
 
     -- Posting to OpenAI using the private key
     local genPost = http.post("https://api.openai.com/v1/images/generations",
-        '{"prompt": "' .. prompt .. '", "n": ' .. number .. ', "size": "' .. size .. '"}',
-        { ["Content-Type"] = "application/json", ["Authorization"] = "Bearer " .. genAuth })
+    '{"prompt": "' .. prompt .. '", "n": ' .. number .. ', "size": "' .. size .. '"}',
+    { ["Content-Type"] = "application/json", ["Authorization"] = "Bearer " .. genAuth })
+
+    -- Error handling on empty response
     if genPost then
         return genPost.readAll()
     else
