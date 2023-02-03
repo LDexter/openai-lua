@@ -22,17 +22,44 @@ Capable of very simple tasks, usually the fastest model in the GPT-3 series, and
 [Good at: Parsing text, simple classification, address correction, keywords]
 ]]
 
+
+--! Testing .env
+local isEnv = fs.exists("/DavinCC/lib/openai-lua/.env", "r")
+if not isEnv then error("No .env found") end
+
+-- Accessing private key in local .env file
+local apiEnv = fs.open("/DavinCC/lib/openai-lua/.env", "r")
+local apiAuth = apiEnv.readAll()
+
+--! Testing template text
+local isTemplate = string.find(apiAuth, "PRIVATE%-API%-KEY%-HERE%-then%-rename%-to%-.env")
+if isTemplate then error("Template text left in .env") end
+
+--! Testing "sk-"
+local isKey = string.find(apiAuth:sub(1, 3), "sk%-")
+if not isKey then error("Incorrect API key (no sk-)") end
+
+--! Testing length
+if #apiAuth ~= 51 then error("Incorrect API key (too many or too few chars)") end
+
+-- Finished with file
+apiEnv.close()
+
+--! Testing HTTP
+local request = http.get("https://example.tweaked.cc")
+if request.readAll() ~= "HTTP is working!\n" then
+    error("HTTP failed! Please follow steps at...\n\n => https://tweaked.cc/guide/local_ips.html <=\n\nHyperlink available in openai-lua, at line 51")
+end
+-- => HTTP is working!
+request.close()
+
+
 -- Request completion from OpenAI, using provided model, prompt, temperature, and maximum tokens
 function openai.complete(model, prompt, temp, tokens)
-    -- Accessing private key in local .env file
-    local cmplEnv = fs.open("/DavinCC/lib/openai-lua/.env", "r")
-    local cmplAuth = cmplEnv.readAll()
-    cmplEnv.close()
-
     -- Posting to OpenAI using the private key
     local cmplPost = http.post("https://api.openai.com/v1/completions",
         '{"model": "' .. model .. '", "prompt": "' .. prompt .. '", "temperature": ' .. temp .. ', "max_tokens": ' .. tokens .. '}',
-        { ["Content-Type"] = "application/json", ["Authorization"] = "Bearer " .. cmplAuth })
+        { ["Content-Type"] = "application/json", ["Authorization"] = "Bearer " .. apiAuth })
 
     -- Error handling on empty response
     if cmplPost then
@@ -45,15 +72,10 @@ end
 
 -- Request image generation from OpenAI, using provided prompt, number, and size
 function openai.generate(prompt, number, size)
-    -- Accessing private key in local .env file
-    local genEnv = fs.open("/DavinCC/lib/openai-lua/.env", "r")
-    local genAuth = genEnv.readAll()
-    genEnv.close()
-
     -- Posting to OpenAI using the private key
     local genPost = http.post("https://api.openai.com/v1/images/generations",
     '{"prompt": "' .. prompt .. '", "n": ' .. number .. ', "size": "' .. size .. '"}',
-    { ["Content-Type"] = "application/json", ["Authorization"] = "Bearer " .. genAuth })
+    { ["Content-Type"] = "application/json", ["Authorization"] = "Bearer " .. apiAuth })
 
     -- Error handling on empty response
     if genPost then
