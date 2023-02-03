@@ -23,6 +23,7 @@ Capable of very simple tasks, usually the fastest model in the GPT-3 series, and
 ]]
 
 
+-- Authenticate API key with error handling
 local function authenticate(path)
     --! Testing .env
     local isEnv = fs.exists(path, "r")
