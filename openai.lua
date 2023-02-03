@@ -54,7 +54,7 @@ local function authenticate(path)
     -- => HTTP is working!
     request.close()
 
-    return apiAuth
+
 end
 
 
@@ -62,6 +62,8 @@ end
 function openai.complete(model, prompt, temp, tokens)
     -- Retrieving private API key
     local cmplKey = authenticate("/DavinCC/lib/openai-lua/.env")
+    if not cmplKey then error("Error retrieving cmpl API key, reason not found :(") end
+
     -- Posting to OpenAI using the private key
     local cmplPost = http.post("https://api.openai.com/v1/completions",
     '{"model": "' .. model .. '", "prompt": "' .. prompt .. '", "temperature": ' .. temp .. ', "max_tokens": ' .. tokens .. '}',
@@ -80,6 +82,8 @@ end
 function openai.generate(prompt, number, size)
     -- Retrieving private API key
     local genKey = authenticate("/DALL-CC/lib/openai-lua/.env")
+    if not genKey then error("Error retrieving gen API key, reason not found :(") end
+
     -- Posting to OpenAI using the private key
     local genPost = http.post("https://api.openai.com/v1/images/generations",
     '{"prompt": "' .. prompt .. '", "n": ' .. number .. ', "size": "' .. size .. '"}',
