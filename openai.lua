@@ -34,7 +34,7 @@ local function authenticate(path)
     if not isEnv then error("No .env found") end
 
     -- Accessing private key in local .env file
-    local apiEnv = fs.open(path, "r")
+    local apiEnv = fs.open(path .. ".env", "r")
     local apiAuth = apiEnv.readAll()
 
     --! Testing template text
