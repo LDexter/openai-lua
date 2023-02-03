@@ -54,7 +54,8 @@ local function authenticate(path)
     -- => HTTP is working!
     request.close()
 
-return apiAuth
+    -- Return error-checked API authentication key
+    return apiAuth
 end
 
 
