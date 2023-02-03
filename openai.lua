@@ -25,8 +25,12 @@ Capable of very simple tasks, usually the fastest model in the GPT-3 series, and
 
 -- Authenticate API key with error handling
 local function authenticate(path)
+    --! Testing .env.env misunderstanding
+    local isEnv = fs.exists(path .. ".env.env", "r")
+    if isEnv then error("The template.env file was renamed incorrectly\nRename the file .env.env, to just .env") end
+
     --! Testing .env
-    local isEnv = fs.exists(path, "r")
+    local isEnv = fs.exists(path .. ".env", "r")
     if not isEnv then error("No .env found") end
 
     -- Accessing private key in local .env file
@@ -63,7 +67,7 @@ end
 -- Request completion from OpenAI, using provided model, prompt, temperature, and maximum tokens
 function openai.complete(model, prompt, temp, tokens)
     -- Retrieving private API key
-    local cmplKey = authenticate("/DavinCC/lib/openai-lua/.env")
+    local cmplKey = authenticate("/DavinCC/lib/openai-lua/")
     if not cmplKey then error("Error retrieving cmpl API key, reason not found :(") end
 
     -- Posting to OpenAI using the private key
@@ -83,7 +87,7 @@ end
 -- Request image generation from OpenAI, using provided prompt, number, and size
 function openai.generate(prompt, number, size)
     -- Retrieving private API key
-    local genKey = authenticate("/DALL-CC/lib/openai-lua/.env")
+    local genKey = authenticate("/DALL-CC/lib/openai-lua/")
     if not genKey then error("Error retrieving gen API key, reason not found :(") end
 
     -- Posting to OpenAI using the private key
