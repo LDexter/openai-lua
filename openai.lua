@@ -53,7 +53,7 @@ local function authenticate(path)
 
     --! Testing HTTP
     local request = http.get("https://example.tweaked.cc")
-    if request.readAll() ~= "HTTP is working!\n" then
+    if not request then
         error("HTTP failed! Please follow steps at...\n\n => https://tweaked.cc/guide/local_ips.html <=\n\nHyperlink available in openai-lua, at line 51")
     end
     -- => HTTP is working!
