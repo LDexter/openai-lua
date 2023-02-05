@@ -37,6 +37,10 @@ local function authenticate(path)
     local apiEnv = fs.open(path .. ".env", "r")
     local apiAuth = apiEnv.readAll()
 
+    -- Ensuring the key contains no common string errors
+    apiAuth = string.gsub(apiAuth, "\n", "")
+    apiAuth = string.gsub(apiAuth, " +", "")
+
     --! Testing template text
     local isTemplate = string.find(apiAuth, "PRIVATE%-API%-KEY%-HERE%-then%-rename%-to%-.env")
     if isTemplate then error("Template text left in .env") end
