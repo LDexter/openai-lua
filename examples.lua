@@ -1,5 +1,5 @@
 -- Importing library
-local openai = require("lib/openai-lua/openai")
+local openai = require("openai")
 
 -- Completion arguments
 local model = "text-davinci-003"
