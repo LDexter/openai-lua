@@ -1,5 +1,9 @@
 local openai = {}
 
+-- Optional filter according to OpenAI usage policies:
+--* https://platform.openai.com/docs/usage-policies/usage-policies
+openai.isFilter = true
+
 --[[
 ?MODEL GUIDE (read more at https://beta.openai.com/docs/models)
 
@@ -68,17 +72,49 @@ local function authenticate(path)
 end
 
 
+-- Test against OpenAI usage policies
+function openai.filter(input, key)
+    key = key or authenticate("/DavinCC/lib/openai-lua/")
+    local test = http.post("https://api.openai.com/v1/moderations",
+    '{"input": "' .. input .. '"}',
+    { ["Content-Type"] = "application/json", ["Authorization"] = "Bearer " .. key })
+
+    -- Error handling on empty response
+    if test then
+        return test.readAll()
+    else
+        return false
+    end
+end
+
+
 -- Request completion from OpenAI, using provided model, prompt, temperature, and maximum tokens
 function openai.complete(model, prompt, temp, tokens)
     -- Retrieving private API key
     local cmplKey = authenticate("/DavinCC/lib/openai-lua/")
     if not cmplKey then error("Error retrieving cmpl API key, reason not found :(") end
 
+    -- Check for filter option
+    if openai.isFilter then
+        openai.flags = {}
+        openai.isFlagged = false
+        local test = openai.filter(prompt, cmplKey)
+        -- Check filter result
+        if test then
+            openai.flags = textutils.unserialiseJSON(test).results[1]
+            openai.isFlagged = openai.flags.flagged
+            -- Check flagging status
+            if openai.isFlagged then
+                return false
+            end
+        end
+    end
+
     -- Posting to OpenAI using the private key
     local cmplPost = http.post("https://api.openai.com/v1/completions",
     '{"model": "' .. model .. '", "prompt": "' .. prompt .. '", "temperature": ' .. temp .. ', "max_tokens": ' .. tokens .. '}',
     { ["Content-Type"] = "application/json", ["Authorization"] = "Bearer " .. cmplKey })
-    
+
     -- Error handling on empty response
     if cmplPost then
         return cmplPost.readAll()
