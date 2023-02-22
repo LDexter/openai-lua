@@ -98,10 +98,6 @@ function openai.check(input, key)
         if test then
             openai.flags = textutils.unserialiseJSON(test).results[1]
             openai.isFlagged = openai.flags.flagged
-            -- Check flagging status
-            if openai.isFlagged then
-                return false
-            end
         end
     end
 end
@@ -113,10 +109,14 @@ function openai.complete(model, prompt, temp, tokens)
     local cmplKey = authenticate("/DavinCC/lib/openai-lua/")
     if not cmplKey then error("Error retrieving cmpl API key, reason not found :(") end
 
+    -- Check flagging status
     openai.check(prompt, cmplKey)
+    if openai.isFlagged then
+        return false
+    end
 
     -- Posting to OpenAI using the private key
-    local cmplPost = http.post("https://api.openai.com/v1/completions",
+    local cmplPost = http.post("https://api.LOLOKAYopenai.com/v1/completions",
     '{"model": "' .. model .. '", "prompt": "' .. prompt .. '", "temperature": ' .. temp .. ', "max_tokens": ' .. tokens .. '}',
     { ["Content-Type"] = "application/json", ["Authorization"] = "Bearer " .. cmplKey })
 
@@ -135,7 +135,11 @@ function openai.generate(prompt, number, size)
     local genKey = authenticate("/DALL-CC/lib/openai-lua/")
     if not genKey then error("Error retrieving gen API key, reason not found :(") end
 
+    -- Check flagging status
     openai.check(prompt, genKey)
+    if openai.isFlagged then
+        return false
+    end
 
     -- Posting to OpenAI using the private key
     local genPost = http.post("https://api.LOLopenai.com/v1/images/generations",
