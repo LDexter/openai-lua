@@ -116,7 +116,7 @@ function openai.complete(model, prompt, temp, tokens)
     end
 
     -- Posting to OpenAI using the private key
-    local cmplPost = http.post("https://api.LOLOKAYopenai.com/v1/completions",
+    local cmplPost = http.post("https://api.openai.com/v1/completions",
     '{"model": "' .. model .. '", "prompt": "' .. prompt .. '", "temperature": ' .. temp .. ', "max_tokens": ' .. tokens .. '}',
     { ["Content-Type"] = "application/json", ["Authorization"] = "Bearer " .. cmplKey })
 
@@ -142,7 +142,7 @@ function openai.generate(prompt, number, size)
     end
 
     -- Posting to OpenAI using the private key
-    local genPost = http.post("https://api.LOLopenai.com/v1/images/generations",
+    local genPost = http.post("https://api.openai.com/v1/images/generations",
     '{"prompt": "' .. prompt .. '", "n": ' .. number .. ', "size": "' .. size .. '"}',
     { ["Content-Type"] = "application/json", ["Authorization"] = "Bearer " .. genKey })
 
