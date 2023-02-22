@@ -90,15 +90,10 @@ function openai.filter(input, key)
 end
 
 
--- Request completion from OpenAI, using provided model, prompt, temperature, and maximum tokens
-function openai.complete(model, prompt, temp, tokens)
-    -- Retrieving private API key
-    local cmplKey = authenticate("/DavinCC/lib/openai-lua/")
-    if not cmplKey then error("Error retrieving cmpl API key, reason not found :(") end
-
+function openai.check(input, key)
     -- Check for filter option
     if openai.isFilter then
-        local test = openai.filter(prompt, cmplKey)
+        local test = openai.filter(input, key)
         -- Check filter result
         if test then
             openai.flags = textutils.unserialiseJSON(test).results[1]
@@ -109,6 +104,16 @@ function openai.complete(model, prompt, temp, tokens)
             end
         end
     end
+end
+
+
+-- Request completion from OpenAI, using provided model, prompt, temperature, and maximum tokens
+function openai.complete(model, prompt, temp, tokens)
+    -- Retrieving private API key
+    local cmplKey = authenticate("/DavinCC/lib/openai-lua/")
+    if not cmplKey then error("Error retrieving cmpl API key, reason not found :(") end
+
+    openai.check(prompt, cmplKey)
 
     -- Posting to OpenAI using the private key
     local cmplPost = http.post("https://api.openai.com/v1/completions",
@@ -130,12 +135,10 @@ function openai.generate(prompt, number, size)
     local genKey = authenticate("/DALL-CC/lib/openai-lua/")
     if not genKey then error("Error retrieving gen API key, reason not found :(") end
 
-    if openai.isFilter then
-        openai.filter(prompt, genKey)
-    end
+    openai.check(prompt, genKey)
 
     -- Posting to OpenAI using the private key
-    local genPost = http.post("https://api.openai.com/v1/images/generations",
+    local genPost = http.post("https://api.LOLopenai.com/v1/images/generations",
     '{"prompt": "' .. prompt .. '", "n": ' .. number .. ', "size": "' .. size .. '"}',
     { ["Content-Type"] = "application/json", ["Authorization"] = "Bearer " .. genKey })
 
