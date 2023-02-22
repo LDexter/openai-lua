@@ -3,6 +3,8 @@ local openai = {}
 -- Optional filter according to OpenAI usage policies:
 --* https://platform.openai.com/docs/usage-policies/usage-policies
 openai.isFilter = true
+openai.flags = {}
+openai.isFlagged = false
 
 --[[
 ?MODEL GUIDE (read more at https://beta.openai.com/docs/models)
@@ -96,8 +98,6 @@ function openai.complete(model, prompt, temp, tokens)
 
     -- Check for filter option
     if openai.isFilter then
-        openai.flags = {}
-        openai.isFlagged = false
         local test = openai.filter(prompt, cmplKey)
         -- Check filter result
         if test then
@@ -129,6 +129,10 @@ function openai.generate(prompt, number, size)
     -- Retrieving private API key
     local genKey = authenticate("/DALL-CC/lib/openai-lua/")
     if not genKey then error("Error retrieving gen API key, reason not found :(") end
+
+    if openai.isFilter then
+        openai.filter(prompt, genKey)
+    end
 
     -- Posting to OpenAI using the private key
     local genPost = http.post("https://api.openai.com/v1/images/generations",
