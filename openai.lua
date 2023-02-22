@@ -74,7 +74,7 @@ local function authenticate(path)
 end
 
 
--- Test against OpenAI usage policies
+-- Tests against OpenAI usage policies
 function openai.filter(input, key)
     key = key or authenticate("/DavinCC/lib/openai-lua/")
     local test = http.post("https://api.openai.com/v1/moderations",
@@ -90,6 +90,7 @@ function openai.filter(input, key)
 end
 
 
+-- Checks for flagging
 function openai.check(input, key)
     -- Check for filter option
     if openai.isFilter then
