@@ -122,7 +122,7 @@ function openai.complete(model, prompt, temp, tokens)
         cmplPost = http.post("https://api.openai.com/v1/chat/completions",
             '{"model": "' .. model .. '", "messages": ' .. prompt .. ', "temperature": ' .. temp .. ', "max_tokens": ' .. tokens .. '}',
             { ["Content-Type"] = "application/json",["Authorization"] = "Bearer " .. cmplKey })
-    elseif model == "text-davinci-003" then
+    else
         cmplPost = http.post("https://api.openai.com/v1/completions",
             '{"model": "' ..
             model .. '", "prompt": "' .. prompt .. '", "temperature": ' .. temp .. ', "max_tokens": ' .. tokens .. '}',
