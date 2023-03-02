@@ -117,9 +117,17 @@ function openai.complete(model, prompt, temp, tokens)
     end
 
     -- Posting to OpenAI using the private key
-    local cmplPost = http.post("https://api.openai.com/v1/completions",
-    '{"model": "' .. model .. '", "prompt": "' .. prompt .. '", "temperature": ' .. temp .. ', "max_tokens": ' .. tokens .. '}',
-    { ["Content-Type"] = "application/json", ["Authorization"] = "Bearer " .. cmplKey })
+    local cmplPost
+    if model == "gpt-3.5-turbo" then
+        cmplPost = http.post("https://api.openai.com/v1/chat/completions",
+            '{"model": "' .. model .. '", "messages": ' .. prompt .. ', "temperature": ' .. temp .. ', "max_tokens": ' .. tokens .. '}',
+            { ["Content-Type"] = "application/json",["Authorization"] = "Bearer " .. cmplKey })
+    elseif model == "text-davinci-003" then
+        cmplPost = http.post("https://api.openai.com/v1/completions",
+            '{"model": "' ..
+            model .. '", "prompt": "' .. prompt .. '", "temperature": ' .. temp .. ', "max_tokens": ' .. tokens .. '}',
+            { ["Content-Type"] = "application/json",["Authorization"] = "Bearer " .. cmplKey })
+    end
 
     -- Error handling on empty response
     if cmplPost then
