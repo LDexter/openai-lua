@@ -9,19 +9,24 @@ openai.isFlagged = false
 --[[
 ?MODEL GUIDE (read more at https://beta.openai.com/docs/models)
 
-*davinci:
+* gpt-3.5-turbo:
+Turbo is the same model family that powers ChatGPT.
+It is optimized for conversational chat input and output but does equally well on completions when compared with the Davinci model family.
+Any use case that can be done well in ChatGPT should perform well with the Turbo model family in the API.
+
+* davinci:
 Most capable GPT-3 model. Can do any task the other models can do, often with higher quality.
 [Good at: Complex intent, cause and effect, summarization for audience]
 
-*curie:
+* curie:
 Very capable, but faster and lower cost than Davinci.
 [Good at: Language translation, complex classification, text sentiment, summarization]
 
-*babbage:
+* babbage:
 Capable of straightforward tasks, very fast, and lower cost.
 [Good at: Moderate classification, semantic search classification]
 
-*ada:
+* ada:
 Capable of very simple tasks, usually the fastest model in the GPT-3 series, and lowest cost.
 [Good at: Parsing text, simple classification, address correction, keywords]
 ]]
@@ -117,10 +122,12 @@ function openai.complete(model, prompt, temp, tokens)
     -- Posting to OpenAI using the private key
     local cmplPost
     if model == "gpt-3.5-turbo" then
+        -- Specialised post for chat format
         cmplPost = http.post("https://api.openai.com/v1/chat/completions",
             '{"model": "' .. model .. '", "messages": ' .. prompt .. ', "temperature": ' .. temp .. ', "max_tokens": ' .. tokens .. '}',
             { ["Content-Type"] = "application/json",["Authorization"] = "Bearer " .. cmplKey })
     else
+        -- General post format for all other completions
         cmplPost = http.post("https://api.openai.com/v1/completions",
             '{"model": "' ..
             model .. '", "prompt": "' .. prompt .. '", "temperature": ' .. temp .. ', "max_tokens": ' .. tokens .. '}',
