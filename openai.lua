@@ -129,8 +129,7 @@ function openai.complete(model, prompt, temp, tokens)
     else
         -- General post format for all other completions
         cmplPost = http.post("https://api.openai.com/v1/completions",
-            '{"model": "' ..
-            model .. '", "prompt": "' .. prompt .. '", "temperature": ' .. temp .. ', "max_tokens": ' .. tokens .. '}',
+            '{"model": "' .. model .. '", "prompt": "' .. prompt .. '", "temperature": ' .. temp .. ', "max_tokens": ' .. tokens .. '}',
             { ["Content-Type"] = "application/json",["Authorization"] = "Bearer " .. cmplKey })
     end
 
