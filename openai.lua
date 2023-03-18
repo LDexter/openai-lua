@@ -124,12 +124,14 @@ function openai.complete(model, prompt, temp, tokens)
     if model == "gpt-3.5-turbo" or model == "gpt-4" or model == "gpt-4-32k" then
         -- Specialised post for chat format
         cmplPost = http.post("https://api.openai.com/v1/chat/completions",
-        '{"model": "' .. model .. '", "messages": ' .. prompt .. ', "temperature": ' .. temp .. ', "max_tokens": ' .. tokens .. '}',
-        { ["Content-Type"] = "application/json",["Authorization"] = "Bearer " .. cmplKey })
+            '{"model": "' ..
+            model .. '", "messages": ' .. prompt .. ', "temperature": ' .. temp .. ', "max_tokens": ' .. tokens .. '}',
+            { ["Content-Type"] = "application/json",["Authorization"] = "Bearer " .. cmplKey })
     else
         -- General post format for all other completions
         cmplPost = http.post("https://api.openai.com/v1/completions",
-            '{"model": "' .. model .. '", "prompt": "' .. prompt .. '", "temperature": ' .. temp .. ', "max_tokens": ' .. tokens .. '}',
+            '{"model": "' ..
+            model .. '", "prompt": "' .. prompt .. '", "temperature": ' .. temp .. ', "max_tokens": ' .. tokens .. '}',
             { ["Content-Type"] = "application/json",["Authorization"] = "Bearer " .. cmplKey })
     end
 
