@@ -8,6 +8,9 @@ _Currently still reliant on CC:Tweaked libraries, with full independance planned
 
 ### Provides The Following OpenAI Models:
 
+- gpt-4
+- gpt-4-32k
+- gpt-3.5-turbo
 - text-davinci-003
 - text-curie-001
 - text-babbage-001
@@ -15,9 +18,10 @@ _Currently still reliant on CC:Tweaked libraries, with full independance planned
 
 ### API Setup:
 
-1. Sign-in and access your [private API key](https://beta.openai.com/account/api-keys)
-2. Paste the API key into `template.env`, replacing the sample key
-3. Rename template.env to just .env
+1. Run `git clone https://github.com/LDexter/openai-lua.git`
+2. Sign-in and access your [private API key](https://beta.openai.com/account/api-keys)
+3. Paste the API key into `template.env`, replacing the sample key
+4. Rename template.env to just .env
 
 Now your key will not be publicised through git.
 
